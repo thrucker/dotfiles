@@ -5,15 +5,16 @@ set rtp+=~/.vim/bundle/Vundle.vim/
 call vundle#begin()
 
 " let Vundle manage Vundle
-" required! 
+" required!
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'tpope/vim-fugitive'
-Plugin 'maxbrunsfeld/vim-yankstack'
+"Plugin 'maxbrunsfeld/vim-yankstack'
 Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'scrooloose/nerdtree'
-Plugin 'kien/ctrlp.vim'
+"Plugin 'kien/ctrlp.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'digitaltoad/vim-jade'
@@ -21,8 +22,21 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-eunuch'
 Plugin 'tpope/vim-surround'
-Plugin 'suan/vim-instant-markdown'
+Plugin 'benekastah/neomake'
+Plugin 'shime/vim-livedown'
 Plugin 'wavded/vim-stylus'
+"Plugin 'lambdatoast/elm.vim'
+Plugin 'szw/vim-ctrlspace'
+"Plugin 'scrooloose/syntastic'
+"Plugin 'leafgarland/typescript-vim'
+"Plugin 'Shougo/vimproc.vim'
+"Plugin 'Quramy/tsuquyomi'
+Plugin 'mbbill/undotree'
+Plugin 'vim-ruby/vim-ruby'
+
+" Clojure
+Plugin 'guns/vim-clojure-static'
+Plugin 'kien/rainbow_parentheses.vim'
 
 call vundle#end()
 filetype plugin indent on     " required!
@@ -36,7 +50,6 @@ filetype plugin indent on     " required!
 " see :h vundle for more details or wiki for FAQ
 " NOTE: comments after Bundle commands are not allowed.
 
-
 " Always show airline
 set laststatus=2
 
@@ -46,7 +59,7 @@ if has('gui_running')
     set background=light
     set macmeta
 else
-    set background=dark
+    set background=light
 endif
 let g:solarized_termcolors=256
 colorscheme solarized
@@ -120,7 +133,7 @@ set wildignore+=*.gem
 set wildignore+=log/**
 set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
-set wildignore+=*node_modules*
+"set wildignore+=*node_modules*
 set hidden
 set switchbuf=useopen
 
@@ -143,8 +156,9 @@ if executable('ag')
   let g:ctrlp_use_caching = 0
 endif
 
-command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 nnoremap K :Ag<space>
+nnoremap <leader>q :ccl<cr>
 
 augroup MyAutoCmd
     autocmd!
@@ -153,6 +167,12 @@ augroup END
 
 nnoremap <leader>ev :e ~/.vimrc<cr>
 nnoremap <leader>ez :e ~/.zshrc<cr>
+nnoremap <leader>es :e ~/.ssh/config<cr>
+
+nnoremap <leader>bd :Bufonly<cr>
+nnoremap <leader>gb :Gblame<cr>
+
+autocmd BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
 
 let g:airline#extensions#hunks#enabled=0
 let g:airline_powerline_fonts = 1
@@ -164,9 +184,28 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t'
 
 " Easy buffer navigation
-nnoremap <C-j> :bprevious<cr>
-nnoremap <C-k> :bnext<cr>
-nnoremap <Leader>x :bd<cr>
+function! s:HasCtrlSpace()
+    for bundle in g:vundle#bundles
+        if bundle.name == "vim-ctrlspace"
+            return 1
+        endif
+    endfor
+
+    return 0
+endfunction
+
+let s:ctrlspace = s:HasCtrlSpace()
+if s:ctrlspace
+    nnoremap <C-j> :CtrlSpaceGoUp<cr>
+    nnoremap <C-k> :CtrlSpaceGoDown<cr>
+else
+    nnoremap <C-j> :bprevious<cr>
+    nnoremap <C-k> :bnext<cr>
+endif
+
+" close file fix
+" nnoremap <Leader>x :bd<cr>
+nnoremap <Leader>x :bp<cr>:bd #<cr>
 
 if v:version >= 700
     au BufLeave * if !&diff | let b:winview = winsaveview() | endif
@@ -203,8 +242,8 @@ nnoremap <F7> mzgg=G`z
 
 nnoremap I $a<cr>
 
-nnoremap <leader>cc :call NERDComment(0, "invert")<cr>
-vnoremap <leader>cc :call NERDComment(0, "invert")<cr>
+"nnoremap <leader>cc :call NERDComment(0, "invert")<cr>
+"vnoremap <leader>cc :call NERDComment(0, "invert")<cr>
 
 set backspace=indent,eol,start
 set relativenumber
@@ -220,4 +259,65 @@ nnoremap <silent> <leader>rts :call TrimWhiteSpace()<cr>
 set textwidth=0 wrapmargin=0
 
 let &colorcolumn=join(range(121,999),",")
+set clipboard=unnamed
 
+" ctrlspace settings
+nnoremap <silent><C-p> :CtrlSpace O<CR>
+let g:CtrlSpaceLoadLastWorkspaceOnStart = 1
+let g:CtrlSpaceSaveWorkspaceOnSwitch = 1
+let g:CtrlSpaceSaveWorkspaceOnExit = 1
+
+" livedown
+nnoremap gm :LivedownToggle<cr>
+let g:livedown_port = 1337
+let g:livedown_browser = "open /Applications/Google\ Chrome.app"
+
+" syntastic
+nnoremap <leader>zz :lopen<cr>
+nnoremap <leader>zn :lnext<cr>
+nnoremap <leader>zp :lprev<cr>
+
+" coffee compile
+"nnoremap <leader>cc :CoffeeCompile<cr>
+"vnoremap <leader>cc :CoffeeCompile<cr>
+
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_loc_list_height = 5
+"let g:syntastic_coffee_coffeelint_args = "--file /Users/trucker/code/actano/rplan/coffeelint.json"
+"let g:syntastic_coffee_checkers = ['coffeelint']
+"let g:syntastic_always_populate_loc_list = 1
+
+" typescript-vim
+"autocmd QuickFixCmdPost [^l]* nested cwindow
+"autocmd QuickFixCmdPost    l* nested lwindow
+
+" neomake
+let g:neomake_coffeescript_enabled_makers = ['coffeelint']
+autocmd! BufWritePost * Neomake
+
+" UndoTree
+nnoremap <F5> :UndotreeToggle<cr>
+
+" Mocha .only
+function! Mocha_Toggle_Only()
+    let keywords = ['it', 'describe', 'context']
+    let keywordsGroup = join(keywords, '\|')
+    let only = '^\s*\('.keywordsGroup.'\)\.only'
+    let noOnly = '^\s*\('.keywordsGroup.'\)\(\s\|(\)'
+    let currentLine = getline('.')
+    if match(currentLine, only) >= 0
+        s/\.only//g
+    elseif match(currentLine, noOnly) >= 0
+        normal! 0ea.only
+    endif
+endfunction
+
+nnoremap <leader>o :call Mocha_Toggle_Only()<cr>
+
+vnoremap <leader>64 c<c-r>=system('base64', @")<cr><esc>dd
