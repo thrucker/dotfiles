@@ -33,6 +33,7 @@ Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 " Plug 'dan-t/vim-hsimport', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
 Plug 'mpickering/hlint-refactor-vim', { 'for': 'haskell' }
+Plug 'godlygeek/tabular', { 'for': 'haskell' }
 
 "Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'vim-airline/vim-airline-themes'
@@ -281,7 +282,7 @@ augroup MyAutoCmd
     autocmd MyAutoCmd BufWritePost vimrc.haskell nested source $MYVIMRC
 augroup END
 
-nnoremap <leader>ev :e ~/.vim/init.vim<cr>
+nnoremap <leader>ev :e ~/.vimrc<cr>
 nnoremap <leader>ez :e ~/.zshrc<cr>
 nnoremap <leader>es :e ~/.ssh/config<cr>
 nnoremap <leader>et :e ~/.tmux.conf<cr>
