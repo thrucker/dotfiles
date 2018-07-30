@@ -1,0 +1,14 @@
+set main-view                 = line-number:no,interval=5 id:yes,color=no date:relative-compact,local=no,format= author:abbreviated commit-title:yes,graph=v2,refs=yes
+set refresh-interval          = 10
+set refresh-mode              = periodic
+set vertical-split = false
+
+bind status A !?git commit --amend --reuse-message=HEAD
+bind status D !?rm %(file)
+bind main B !git rebase -i --autosquash %(commit)~
+bind main P !git push origin
+bind main G @sh -c "open 'https://'$(git remote -v | grep -Eo 'github.com[:/][^ ]+' | head -1 | tr : /)'/commit/%(commit)'"
+bind main J @sh -c "open $(~/code/github-to-jenkins/github-to-jenkins actano/rplan %(commit))"
+bind main C @git checkout %(commit)
+bind main F !git commit --fixup %(commit)
+bind main U !git fetch
