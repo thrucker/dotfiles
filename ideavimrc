@@ -1,0 +1,8 @@
+imap jk <Esc>
+
+set surround
+set clipboard+=unnamedplus
+
+nnoremap <C-Right> :action NextTab<cr>
+nnoremap <C-Left> :action PreviousTab<cr>
+nnoremap <A-E> :action editRunConfigurations<cr>
