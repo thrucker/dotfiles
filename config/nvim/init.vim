@@ -26,13 +26,14 @@ Plug 'bling/vim-airline'
 " Text manipulation
 Plug 'vim-scripts/Align'
 Plug 'tpope/vim-commentary'
+Plug 'scrooloose/nerdcommenter'
 
 " Haskell
-Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
-Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
-" Plug 'dan-t/vim-hsimport', { 'for': 'haskell' }
+"Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell' }
+"Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
+"Plug 'dan-t/vim-hsimport', { 'for': 'haskell' }
 Plug 'Twinside/vim-hoogle', { 'for': 'haskell' }
-Plug 'mpickering/hlint-refactor-vim', { 'for': 'haskell' }
+"Plug 'mpickering/hlint-refactor-vim', { 'for': 'haskell' }
 Plug 'godlygeek/tabular', { 'for': 'haskell' }
 
 "Plug 'maxbrunsfeld/vim-yankstack'
@@ -69,6 +70,10 @@ Plug 'honza/vim-snippets'           " collection of snippets
 " Purescript
 Plug 'raichoo/purescript-vim'
 Plug 'frigoeu/psc-ide-vim'
+
+" Go
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'mdempsky/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
 
 call plug#end()
 " }}}
@@ -210,6 +215,17 @@ set number
 
 set listchars=nbsp:¬,tab:»·,trail:·
 set list
+
+" Go
+augroup golang
+  au!
+  au Filetype go setlocal listchars+=tab:\ \ 
+  au Filetype go nnoremap <leader>d :sp <CR>:exe "GoDef"<CR>
+  au Filetype go nnoremap <leader>r :GoRun %<CR>
+  au Filetype go nnoremap <leader>b :GoBuild<CR>
+augroup END
+
+let g:go_fmt_command = "goimports"
 
 " Set 7 lines to the cursor - when moving vertically using j/k
 set scrolloff=7
@@ -401,13 +417,11 @@ nnoremap <leader>zp :lprev<cr>
 "set statusline+=%{SyntasticStatuslineFlag()}
 "set statusline+=%*
 
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-" let g:syntastic_loc_list_height = 5
-"let g:syntastic_coffee_coffeelint_args = "--file /Users/trucker/code/actano/rplan/coffeelint.json"
-"let g:syntastic_coffee_checkers = ['coffeelint']
-"let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_loc_list_height = 7
+let g:syntastic_always_populate_loc_list = 1
 
 " typescript-vim
 "autocmd QuickFixCmdPost [^l]* nested cwindow
@@ -472,6 +486,7 @@ let g:purescript_indent_where = 2
 let g:purescript_indent_do = 2
 let g:purescript_indent_in = 2
 
-imap jj <Esc>
+imap jk <Esc>
 
 execute 'source ' . config_haskell
+

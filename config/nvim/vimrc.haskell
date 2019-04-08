@@ -20,54 +20,54 @@ nnoremap <silent> <leader>hz :HoogleClose<cr>
 " Formatting {{{
 
 " Use hindent instead of par for haskell buffers
-autocmd FileType haskell let &formatprg="hindent --tab-size=2 -XQuasiQuotes"
+"autocmd FileType haskell let &formatprg="hindent --tab-size=2 -XQuasiQuotes"
 
 " Delete trailing white space on save
-augroup whitespace
-  autocmd!
-  autocmd BufWrite *.hs :call DeleteTrailingWS()
-augroup END
+"augroup whitespace
+  "autocmd!
+  "autocmd BufWrite *.hs :call DeleteTrailingWS()
+"augroup END
 
 " }}}
 
 " Completion, Syntax check, Lint & Refactor {{{
 
-augroup haskell
-  autocmd!
-  autocmd FileType haskell let g:haskellmode_completion_ghc = 1
-  autocmd FileType haskell map <silent> <leader><jpace> :noh<cr>:GhcModTypeClear<cr>
-  autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-augroup END
+"augroup haskell
+  "autocmd!
+  "autocmd FileType haskell let g:haskellmode_completion_ghc = 1
+  "autocmd FileType haskell map <silent> <leader><space> :noh<cr>:GhcModTypeClear<cr>
+  "autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+"augroup END
 
-if has("gui_running")
-  imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
-else
-  if has("unix")
-    inoremap <Nul> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
-  endif
-endif
+"if has("gui_running")
+  "imap <c-space> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
+"else
+  "if has("unix")
+    "inoremap <Nul> <c-r>=SuperTabAlternateCompletion("\<lt>c-x>\<lt>c-o>")<cr>
+  "endif
+"endif
 
-noremap <silent> <leader>ht :GhcModType<CR>
-noremap <silent> <leader>hT :GhcModTypeInsert<CR>
+"noremap <silent> <leader>ht :GhcModType<CR>
+"noremap <silent> <leader>hT :GhcModTypeInsert<CR>
 
-nnoremap <silent> <leader>i :silent update <bar> HsimportSymbol<CR>
+"nnoremap <silent> <leader>i :silent update <bar> HsimportSymbol<CR>
 
 " Disable hlint-refactor-vim's default keybindings
-let g:hlintRefactor#disableDefaultKeybindings = 1
+"let g:hlintRefactor#disableDefaultKeybindings = 1
 
 " hlint-refactor-vim keybindings
-noremap <silent> <leader>hr :call ApplyOneSuggestion()<cr>
-noremap <silent> <leader>hR :call ApplyAllSuggestions()<cr>
+"noremap <silent> <leader>hr :call ApplyOneSuggestion()<cr>
+"noremap <silent> <leader>hR :call ApplyAllSuggestions()<cr>
 
 " open the neomake error window automatically when an error is found
-" let g:neomake_open_list = 2
+"let g:neomake_open_list = 2
 
 " options for Haskell syntax check
-let g:neomake_haskell_ghc_mod_args = '-g-Wall'
+"let g:neomake_haskell_ghc_mod_args = '-g-Wall'
 
 " Resolve ghcmod base directory
-au FileType haskell let g:ghcmod_use_basedir = getcwd()
+"au FileType haskell let g:ghcmod_use_basedir = getcwd()
 
 " }}}
 
-let g:loaded_syntastic_haskell_hdevtools_checker=1
+"let g:loaded_syntastic_haskell_hdevtools_checker=1
